@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const fs = require('fs');
 const bot = new Discord.Client();
 
 bot.on('ready', () => {
@@ -6,108 +7,71 @@ bot.on('ready', () => {
 });
 
 bot.on('message', msg => {
-
-	if (msg.content === '!hugh'){
-		playClip(msg, 'assets/hugh.mp3', 2000, '2');
-	}
-	else if (msg.content === '!wot full'){
-		playClip(msg, 'assets/wotfull.mp3', 7000, '.25');
-	}
-	else if (msg.content === '!thisperson'){
-		playClip(msg, 'assets/thisperson.mp3', 6000, '.25');
-	}
-	else if(msg.content === '!wot'){
-		playClip(msg, 'assets/wot.mp3', 2000, '.25');
-	}
-	else if (msg.content === "!triggered"){
-		playClip(msg, 'assets/triggered.mp3', 10000, '.25');
-	}
-	else if (msg.content === "!commands"){
-		msg.reply("!hugh, !triggered, !wot, !wot full, !thisperson, !remix, !bruh, !nerfthis, !nerfthislmao, !highnoon, !diediedie, !pb, !no, !heff, !thousandmiles, !yaaas, !cedarrapids, !suh, !huuuuuuu, !pussy");
-	}
-	else if (msg.content === "Thanks!"){
-		msg.reply("No Problem.");
-	}
-	else if (msg.content === "!remix"){
-		playClip(msg, 'assets/remix.mp3', 10000, '.20');
-	}
-	else if (msg.content === "!bruh"){
-		playClip(msg, 'assets/bruh.mp3', 2000, '.30');
-	}
-	else if (msg.content === "!nerfthis"){
-		playClip(msg, 'assets/nerfthis.mp3', 2000, '.30');
-	}
-	else if (msg.content === "!nerfthislmao"){
-		playClip(msg, 'assets/nerfthislmao.mp3', 4000, '.30');
-	}
-	else if (msg.content === "!highnoon"){
-		playClip(msg, 'assets/highnoon.mp3', 4000, '.30');
-	}
-	else if (msg.content === "!diediedie"){
-		playClip(msg, 'assets/diediedie.mp3', 4000, '.15');
-	}
-	else if (msg.content === "!pb"){
-		playClip(msg, 'assets/pb.mp3', 4000, '.30');
-	}
-	else if (msg.content === "!no"){
-		playClip(msg, 'assets/no.mp3', 3000, '.30');
-	}
-	else if (msg.content === "!heff"){
-		playClip(msg, 'assets/heff.mp3', 5000, '.30');
-	}
-	else if (msg.content === "!thousandmiles"){
-		playClip(msg, 'assets/thousandmiles.mp3', 12000, '.30');
-	}
-	else if (msg.content === "!yaaas"){
-		playClip(msg, 'assets/yaaas.mp3', 6000, '.30');
-	}
-	else if (msg.content === "!cedarrapids"){
-		playClip(msg, 'assets/cedarrapids.mp3', 6000, '.30');
-	}
-	else if (msg.content === "!suh"){
-		playClip(msg, 'assets/suh.mp3', 3000, '.30');
-	}
-	else if (msg.content === "!huuuuuuu"){
-		playClip(msg, 'assets/huuuuuuu.mp3', 9000, '.50');
-	}
-	else if (msg.content === "!pussy"){
-		playClip(msg, 'assets/pussy.mp3', 6000, '.50');
-	}
-	else if (msg.content === "!mib"){
-		playClip(msg, 'assets/mib.mp3', 8000, '.40');
-	}
-	else if (msg.content === "!darkness"){
-		playClip(msg, 'assets/darkness.mp3', 12000, '.25');
-	}
-	else if (msg.content === "!okay"){
-		playClip(msg, 'assets/okay.mp3', 5000, '.4');
+	var assets = AudioAssets.load();
+	if (msg.content == '!commands') {
+        var commands = '!commands !Thanks !ReloadAudio ' +
+			assets.map((a) => a.command).join(' ');
+        msg.reply(commands);
+    } else if (msg.content == '!Thanks') {
+        msg.reply("No Problem.");
+	} else if (msg.content == '!ReloadAudio') {
+		AudioAssets.load(true);
+    } else { // Handle audio file commands.
+		assets.forEach(asset => {
+			if (msg.content == asset.command) {
+				playClip(msg,  asset);
+			}
+		});
 	}
 });
 
+class Asset {
+	constructor(file, volume) {
+		this.file = file;
+		this.volume = volume;
+		this.command = '!' + file.substring(0, file.indexOf('.'));
+		this.path = 'assets/' + file;
+	}
+}
+
+class AudioAssets {
+	// Load all audio assets.
+	//
+	// Will only load files once unless forceReload is true.
+    static load(forceReload = false) {
+        if (AudioAssets._assets == undefined || forceReload) {
+            AudioAssets._assets = [];
+            var files = fs.readdirSync('assets');
+            files.forEach(file => {
+                var asset = new Asset(file, '.30');
+                // adjust for custom volume
+                if (asset.command == '!hugh') {
+                  asset.volume = '2';
+				}
+                AudioAssets._assets.push(asset);
+                console.log('loaded asset: ' + asset.path);
+            });
+        }
+        return AudioAssets._assets;
+    }
+}
 
 
+function playClip(msg, asset) {
+	console.log(msg.author.username + " used " + msg.content);
+
+	var channel = msg.member.voiceChannel;
+	if (channel == undefined){
+		msg.reply("You must be in a voice channel to use this command.");
+	} else {
+        channel.join().then(connection => {
+        	console.log("playing " + asset.path + " at " + asset.volume);
+            connection.playFile(
+            	asset.path,
+				{volume: asset.volume})
+				.on('end', () => { channel.leave(); });
+    	});
+    }
+}
 
 bot.login('MjU0NTA0NDQ3OTgyNTY3NDI0.CyQBRg.lPbwoHdv12RO8t1N-Ja9j-mJQq8');
-
-function playClip(msg, clip, duration, volume){
-
-
-	console.log(msg.author.username + " used " + msg.content);
-	var channel = msg.member.voiceChannel;
-
-	if (msg.member.voiceChannel == undefined){
-		msg.reply("You must be in a voice channel to use this command.");
-	}
-	else{
-	msg.member.voiceChannel.join()
-	 .then(connection => {
-   const dispatcher = connection.playFile(clip, {volume: volume});
-   setTimeout(function(){channel.leave();}, duration);
-
- })
- .catch(console.error);
-}
-}
-
-
-
