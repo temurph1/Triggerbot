@@ -1,0 +1,14 @@
+{
+  "name": "TriggerBot",
+  "version": "0.0.2",
+  "bin": "bot.js",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/temurph1/Triggerbot"
+  },
+  "dependencies": {
+    "discord.js": "*",
+    "ffmpeg": "*",
+    "node-opus": "^0.2.0"
+  }
+}
