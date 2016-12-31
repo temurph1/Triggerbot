@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "discord.js": "*",
-    "ffmpeg": "*"
+    "ffmpeg": "*",
+    "node-opus": "^0.2.0"
   }
 }
