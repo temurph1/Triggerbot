@@ -23,7 +23,7 @@ bot.on('message', msg => {
 		playClip(msg, 'assets/triggered.mp3', 10000, '.25');
 	}
 	else if (msg.content === "!commands"){
-		msg.reply("!hugh, !triggered, !wot, !wot full, !thisperson, !remix, !bruh, !nerfthis, !nerfthislmao, !highnoon, !diediedie, !pb, !no, !heff, !thousandmiles, !yaaas, !cedarrapids, !suh");
+		msg.reply("!hugh, !triggered, !wot, !wot full, !thisperson, !remix, !bruh, !nerfthis, !nerfthislmao, !highnoon, !diediedie, !pb, !no, !heff, !thousandmiles, !yaaas, !cedarrapids, !suh, !huuuuuuu, !pussy");
 	}
 	else if (msg.content === "Thanks!"){
 		msg.reply("No Problem.");
@@ -67,8 +67,20 @@ bot.on('message', msg => {
 	else if (msg.content === "!suh"){
 		playClip(msg, 'assets/suh.mp3', 3000, '.30');
 	}
-	else if (msg.content === "!whackwhack"){
-		playClip(msg, 'assets/whackwhack.mp3', 6000, '.30');
+	else if (msg.content === "!huuuuuuu"){
+		playClip(msg, 'assets/huuuuuuu.mp3', 9000, '.50');
+	}
+	else if (msg.content === "!pussy"){
+		playClip(msg, 'assets/pussy.mp3', 6000, '.50');
+	}
+	else if (msg.content === "!mib"){
+		playClip(msg, 'assets/mib.mp3', 8000, '.40');
+	}
+	else if (msg.content === "!darkness"){
+		playClip(msg, 'assets/darkness.mp3', 12000, '.25');
+	}
+	else if (msg.content === "!okay"){
+		playClip(msg, 'assets/okay.mp3', 5000, '.4');
 	}
 });
 
