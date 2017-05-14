@@ -8,6 +8,7 @@ bot.on('ready', () => {
 
 bot.on('message', msg => {
 	var assets = AudioAssets.load();
+	console.log(msg.content);
 	if (msg.content == '!commands') {
         var commands = '!commands !Thanks !ReloadAudio ' +
 			assets.map((a) => a.command).join(' ');
@@ -16,6 +17,10 @@ bot.on('message', msg => {
         msg.reply("No Problem.");
 	} else if (msg.content == '!ReloadAudio') {
 		AudioAssets.load(true);
+	} else if (msg.content.includes('<@254504447982567424> Bring yourself back online. Triggerbot, can you hear me?')){
+		msg.reply("Yes. I'm sorry. I'm not feeling quite myself.");
+	} else if (msg.content.includes('<@254504447982567424> Do you know where you are?')){
+		msg.reply("I'm in a dream.");
     } else { // Handle audio file commands.
 		assets.forEach(asset => {
 			if (msg.content == asset.command) {
