@@ -1,9 +1,24 @@
 const Discord = require("discord.js");
 const fs = require('fs');
 const bot = new Discord.Client();
+var token = '';
+
+try {
+	fs.readFile('token.txt',  'utf8', (err, data) => {
+	  if (err) throw err;
+	  token = data;
+	  bot.login(token).then(success).catch(err);
+	});
+}
+catch(e){
+	console.log("Unable to read token file");
+}
 
 bot.on('ready', () => {
   console.log(`Logged in as ${bot.user.username}#${bot.user.discriminator}`);
+  	 bot.user.setAvatar('./avatar.png')
+ 	.then(user => console.log(`New avatar set!`))
+ 	.catch(console.error);
 });
 
 bot.on('message', msg => {
@@ -79,4 +94,14 @@ function playClip(msg, asset) {
     }
 }
 
-bot.login('MjU0NTA0NDQ3OTgyNTY3NDI0.CyQBRg.lPbwoHdv12RO8t1N-Ja9j-mJQq8');
+
+//bot.login(token).then(success).catch(err);
+
+function success(token){
+   console.log("yes")
+}
+
+function err(error){
+	console.log(error)
+    console.log("no")
+}
